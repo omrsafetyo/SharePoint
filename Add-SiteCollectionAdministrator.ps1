@@ -16,7 +16,7 @@ Param(
         [Microsoft.SharePoint.SPWeb]
         $Web,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory=$true)]
         [string]
         $UserName
 )
