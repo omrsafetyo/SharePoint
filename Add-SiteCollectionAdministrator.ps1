@@ -38,8 +38,4 @@ Param(
 	$webUser.update()
 	
 	Set-SPSite -Identity $siteUrl -SecondaryOwnerAlias $OriginalAdmin
-
-	$web.dispose()
-	$site.dispose()
-	
 }
