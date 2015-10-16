@@ -23,19 +23,21 @@ Param(
 
 	if ( -NOT($web) ) {
 		$Web = Get-SPWeb -Site $Url
+	} else {
+		$Url = $Web.Url
 	}
-	$siteAdmin = New-Object Microsoft.SharePoint.Administration.SPSiteAdministration($siteUrl)
+	$siteAdmin = New-Object Microsoft.SharePoint.Administration.SPSiteAdministration($Url)
 	$OriginalAdmin = $siteAdmin.SecondaryContactLoginName
 	
-	Set-SPSite -Identity $siteUrl -SecondaryOwnerAlias $ENV:USERNAME
+	Set-SPSite -Identity $Url -SecondaryOwnerAlias $ENV:USERNAME
 	
 	$WebUser = $Web.AllUsers | ? { $_ -match $UserName }
 	if ( [string]::IsNullOrEmpty($WebUser) ) {
-		$WebUser = New-SPUser -UserAlias $UserName -web $siteUrl
+		$WebUser = New-SPUser -UserAlias $UserName -web $Url
 	}
-	Write-Host "Making $WebUser a site admin for $siteUrl"
+	Write-Host "Making $WebUser a site admin for $Url"
 	$webUser.IsSiteAdmin = 1
 	$webUser.update()
 	
-	Set-SPSite -Identity $siteUrl -SecondaryOwnerAlias $OriginalAdmin
+	Set-SPSite -Identity $Url -SecondaryOwnerAlias $OriginalAdmin
 }
