@@ -21,15 +21,16 @@ Param(
         $UserName
 )
 
+	
+	$siteAdmin = New-Object Microsoft.SharePoint.Administration.SPSiteAdministration($Url)
+	$OriginalAdmin = $siteAdmin.SecondaryContactLoginName
+	
+	Set-SPSite -Identity $Url -SecondaryOwnerAlias $ENV:USERNAME
 	if ( -NOT($web) ) {
 		$Web = Get-SPWeb -Site $Url
 	} else {
 		$Url = $Web.Url
 	}
-	$siteAdmin = New-Object Microsoft.SharePoint.Administration.SPSiteAdministration($Url)
-	$OriginalAdmin = $siteAdmin.SecondaryContactLoginName
-	
-	Set-SPSite -Identity $Url -SecondaryOwnerAlias $ENV:USERNAME
 	
 	$WebUser = $Web.AllUsers | ? { $_ -match $UserName }
 	if ( [string]::IsNullOrEmpty($WebUser) ) {
